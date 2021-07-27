@@ -14,6 +14,11 @@ const CardContainer = styled.div`
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   border-radius: 2rem;
   cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 const VideoImage = styled.img`

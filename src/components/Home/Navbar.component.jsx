@@ -35,6 +35,14 @@ const SearchInput = styled.input`
   :-ms-input-placeholder {
     color: #fff;
   }
+
+  @media (max-width: 615px) {
+    width: 8rem;
+  }
+
+  @media (max-width: 500px) {
+    display: none;
+  }
 `;
 
 const buttonStyles = {
