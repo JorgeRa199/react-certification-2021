@@ -8,6 +8,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import { useHistory } from 'react-router';
 
 const NavbarContainer = styled.div`
   width: 100%;
@@ -62,10 +63,10 @@ const buttonStyles = {
   },
 };
 
-const NavBar = () => {
+const NavBar = ({ searchTerm, setSearchTerm }) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [searchTerm, setsearchTerm] = useState('');
   const [mode, setMode] = useState(false);
+  const history = useHistory();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -75,22 +76,25 @@ const NavBar = () => {
     setAnchorEl(null);
   };
 
-  const setTerm = (event) => {
-    setsearchTerm(event.target.value);
-  };
-
   const handleChangeMode = () => {
     setMode(!mode);
   };
 
   return (
     <NavbarContainer>
-      <HomeIcon style={buttonStyles.homeIcon} />
+      <HomeIcon
+        style={buttonStyles.homeIcon}
+        onClick={() =>
+          history.push({
+            pathname: '/',
+          })
+        }
+      />
       <SearchInput
         placeholder="Search..."
         type="text"
         value={searchTerm}
-        onChange={setTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
       />
       <FormControlLabel
         style={{ marginLeft: 'auto' }}

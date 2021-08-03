@@ -1,7 +1,6 @@
 import React from 'react';
+import { useHistory } from 'react-router';
 import styled from 'styled-components';
-
-import { videos } from '../../mocks/videos-mock';
 
 const CardContainer = styled.div`
   width: 20rem;
@@ -52,27 +51,45 @@ const VideosContainer = styled.div`
 `;
 
 export const VideoCard = ({ props }) => {
-  const { thumbnails, title, description } = props;
+  const { snippet, id } = props;
+
+  const history = useHistory();
 
   return (
-    <CardContainer>
-      <VideoImage src={thumbnails.medium.url} />
+    <CardContainer
+      onClick={() =>
+        history.push({
+          pathname: `/video-detail/${id.videoId}`,
+          state: { props },
+        })
+      }
+    >
+      <VideoImage src={snippet.thumbnails.medium.url} />
       <TitleContainer>
-        <h1>{title}</h1>
+        <h1>{snippet.title}</h1>
       </TitleContainer>
       <DescriptionContainer>
-        <p>{description}</p>
+        <p>{snippet.description}</p>
       </DescriptionContainer>
     </CardContainer>
   );
 };
 
-const HomeVideos = () => {
+/* eslint no-nested-ternary: 0 */
+const HomeVideos = ({ videos }) => {
   return (
     <VideosContainer>
-      {videos.items.map((video) => {
-        return <VideoCard props={video.snippet} key={video.snippet.publishedAt} />;
-      })}
+      {videos ? (
+        videos.error ? (
+          <h1>{videos.error.message}</h1>
+        ) : (
+          videos.items.map((video) => {
+            return <VideoCard props={video} key={video.snippet.publishedAt} />;
+          })
+        )
+      ) : (
+        <h1>Loading ...</h1>
+      )}
     </VideosContainer>
   );
 };
