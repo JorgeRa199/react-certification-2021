@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
+
+import VideosContext from '../../Context/VideosContext';
 
 const CardContainer = styled.div`
   width: 20rem;
   height: auto;
-  background-color: #fff;
-  color: #000;
   margin: 2rem;
   display: flex;
   flex-direction: column;
@@ -31,7 +31,7 @@ const TitleContainer = styled.div`
   overflow: hidden;
   text-align: center;
   padding: 5%;
-  font-size: 0.85rem;
+  font-size: 0.6rem;
 `;
 
 const DescriptionContainer = styled.div`
@@ -52,11 +52,17 @@ const VideosContainer = styled.div`
 
 export const VideoCard = ({ props }) => {
   const { snippet, id } = props;
+  const { state } = useContext(VideosContext);
+  const { darkMode } = state;
 
   const history = useHistory();
 
   return (
     <CardContainer
+      style={{
+        backgroundColor: darkMode ? '#515151' : '#fff',
+        color: darkMode ? '#fff' : '#000',
+      }}
       onClick={() =>
         history.push({
           pathname: `/video-detail/${id.videoId}`,

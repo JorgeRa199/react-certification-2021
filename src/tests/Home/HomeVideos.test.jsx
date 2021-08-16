@@ -1,11 +1,12 @@
 import React from 'react';
 import { render } from '@testing-library/react';
+import { videos } from '../../mocks/videos-mock';
 import 'jest-styled-components';
 
 import HomeVideos, { VideoCard } from '../../components/Home/HomeVideos.component';
 
 describe('<NavBar /> rendering', () => {
-  const { container } = render(<HomeVideos />);
+  const { container } = render(<HomeVideos videos={videos} />);
   const homeVideos = container.querySelector('div');
 
   test('should render HomeVideos with styles correctly', () => {
@@ -15,17 +16,19 @@ describe('<NavBar /> rendering', () => {
     expect(homeVideos).toHaveStyle('width: 90%;');
   });
 
-  test('should render all video cards', () => {
-    expect(homeVideos.children).toHaveLength(25);
+  test('should render video cards', async () => {
+    expect(homeVideos.children).toHaveLength(20);
   });
 
   test('should VideoCards correctly', () => {
     const videoMock = {
       title: 'title',
       description: 'description',
-      thumbnails: {
-        medium: {
-          url: 'https://yt3.ggpht.com/ytc/AAUvwnighSReQlmHl_S_vSfvnWBAG5Cw4A0YxtE0tm5OpQ=s240-c-k-c0xffffffff-no-rj-mo',
+      snippet: {
+        thumbnails: {
+          medium: {
+            url: 'https://yt3.ggpht.com/ytc/AAUvwnighSReQlmHl_S_vSfvnWBAG5Cw4A0YxtE0tm5OpQ=s240-c-k-c0xffffffff-no-rj-mo',
+          },
         },
       },
     };

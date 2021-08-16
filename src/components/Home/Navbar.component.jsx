@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -9,6 +9,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import { useHistory } from 'react-router';
+
+import VideosContext from '../../Context/VideosContext';
 
 const NavbarContainer = styled.div`
   width: 100%;
@@ -23,7 +25,6 @@ const NavbarContainer = styled.div`
 
 const SearchInput = styled.input`
   width: 15rem;
-  background-color: #557f98;
   color: #fff;
   padding: 0.6rem 1rem;
   border-radius: 50px;
@@ -63,9 +64,10 @@ const buttonStyles = {
   },
 };
 
-const NavBar = ({ searchTerm, setSearchTerm }) => {
+const NavBar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [mode, setMode] = useState(false);
+  const { state, dispatch } = useContext(VideosContext);
+  const { searchTerm, darkMode } = state;
   const history = useHistory();
 
   const handleClick = (event) => {
@@ -77,11 +79,15 @@ const NavBar = ({ searchTerm, setSearchTerm }) => {
   };
 
   const handleChangeMode = () => {
-    setMode(!mode);
+    dispatch({ type: 'SET_THEME', payload: !darkMode });
+  };
+
+  const handleSetSearchTerm = (event) => {
+    dispatch({ type: 'SET_SEARCH', payload: event.target.value });
   };
 
   return (
-    <NavbarContainer>
+    <NavbarContainer style={{ backgroundColor: darkMode ? '#556CD6' : '#1c5476' }}>
       <HomeIcon
         style={buttonStyles.homeIcon}
         onClick={() =>
@@ -91,16 +97,17 @@ const NavBar = ({ searchTerm, setSearchTerm }) => {
         }
       />
       <SearchInput
+        style={{ backgroundColor: darkMode ? '#8091E0' : '#557f98' }}
         placeholder="Search..."
         type="text"
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={(e) => handleSetSearchTerm(e)}
       />
       <FormControlLabel
         style={{ marginLeft: 'auto' }}
         control={
           <Switch
-            checked={mode}
+            checked={darkMode}
             onChange={handleChangeMode}
             color="primary"
             name="mode"

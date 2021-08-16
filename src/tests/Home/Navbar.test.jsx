@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import 'jest-styled-components';
 
 import NavBar from '../../components/Home/Navbar.component';
@@ -38,5 +38,12 @@ describe('<NavBar /> rendering', () => {
 
     expect(toggleButton).toBeTruthy();
     expect(toggleButton.children[1]).toHaveTextContent('Dark mode');
+  });
+
+  test('should change input value', () => {
+    const searchInput = navBar.querySelector('input');
+
+    fireEvent.change(searchInput, { target: { value: 'testing' } });
+    expect(searchInput.value).toBe('testing');
   });
 });

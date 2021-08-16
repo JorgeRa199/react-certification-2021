@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import styled from 'styled-components';
+
+import VideosContext from '../../Context/VideosContext';
 
 import HomeVideos from '../../components/Home/HomeVideos.component';
 
 const { REACT_APP_API_KEY } = process.env;
 
-function HomePage({ searchTerm }) {
+function HomePage() {
   const [videos, setVideos] = useState(null);
+  const { state } = useContext(VideosContext);
+  const { searchTerm, darkMode } = state;
 
-  const API_URL = `https://www.googleapis.com/youtube/v3/search?key=${REACT_APP_API_KEY}&q=${searchTerm}&part=snippet,id&order=date&maxResults=20`;
+  const API_URL = `https://www.googleapis.com/youtube/v3/search?key=${REACT_APP_API_KEY}&q=${searchTerm}&part=snippet,id&order=date&type=video&maxResults=20`;
 
   async function searchVideos() {
     try {
@@ -28,11 +32,11 @@ function HomePage({ searchTerm }) {
   }, [searchTerm]);
 
   const HomeContainer = styled.section`
-    background-color: #fafafa;
+    margin-top: -4.3rem;
   `;
 
   return (
-    <HomeContainer>
+    <HomeContainer style={{ backgroundColor: darkMode ? '#303030' : '#fafafa' }}>
       <HomeVideos videos={videos ?? videos} />
     </HomeContainer>
   );
