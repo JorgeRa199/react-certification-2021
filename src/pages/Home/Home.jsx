@@ -20,7 +20,7 @@ function HomePage() {
       const response = await fetch(API_URL);
       const videosRes = await response.json();
 
-      setVideos(videosRes);
+      setVideos(videosRes.items);
     } catch (error) {
       console.error('Something went wrong: ', error);
     }
@@ -32,12 +32,12 @@ function HomePage() {
   }, [searchTerm]);
 
   const HomeContainer = styled.section`
-    margin-top: -4.3rem;
+    margin-top: -4.5rem;
   `;
 
   return (
     <HomeContainer style={{ backgroundColor: darkMode ? '#303030' : '#fafafa' }}>
-      <HomeVideos videos={videos ?? videos} />
+      <HomeVideos videos={videos ?? videos} isFav={false} />
     </HomeContainer>
   );
 }

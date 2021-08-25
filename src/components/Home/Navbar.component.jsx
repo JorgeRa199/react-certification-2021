@@ -2,12 +2,17 @@ import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import HomeIcon from '@material-ui/icons/Home';
+import { HomeSharp, Favorite, CheckCircle } from '@material-ui/icons';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { useHistory } from 'react-router';
 
 import VideosContext from '../../Context/VideosContext';
@@ -47,6 +52,11 @@ const SearchInput = styled.input`
   }
 `;
 
+const ErrorParagraph = styled.p`
+  color: #ff0000;
+  align-text: center;
+`;
+
 const buttonStyles = {
   signIn: {
     color: '#fff',
@@ -56,7 +66,7 @@ const buttonStyles = {
   },
   homeIcon: {
     fontSize: '2rem',
-    margin: '0 2.5rem 0 1.8rem',
+    margin: '0 2rem 0 1.8rem',
     cursor: 'pointer',
   },
   switchMode: {
@@ -65,17 +75,51 @@ const buttonStyles = {
 };
 
 const NavBar = () => {
+  const initialFormDataState = {
+    user: '',
+    password: '',
+  };
   const [anchorEl, setAnchorEl] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [formData, setFormData] = useState(initialFormDataState);
+  const [error, setError] = useState({ error: false, message: '' });
   const { state, dispatch } = useContext(VideosContext);
-  const { searchTerm, darkMode } = state;
+  const { searchTerm, darkMode, logedIn } = state;
   const history = useHistory();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleOpenLogIn = () => {
     setAnchorEl(null);
+    setModalOpen(true);
+  };
+
+  const onChange = (e) => {
+    const { value, name } = e.currentTarget;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const onLogin = () => {
+    if (formData.user === 'wizeline' && formData.password === 'Rocks!') {
+      dispatch({ type: 'SET_LOGED', payload: true });
+      setFormData(initialFormDataState);
+      setError({ error: false, message: '' });
+      setModalOpen(false);
+    } else {
+      setError({ error: true, message: 'Invalid username or password' });
+    }
+  };
+
+  const onCancel = () => {
+    setError({ error: false, message: '' });
+    setFormData(initialFormDataState);
+    setModalOpen(false);
+  };
+
+  const onLogOut = () => {
+    dispatch({ type: 'SET_LOGED', payload: false });
   };
 
   const handleChangeMode = () => {
@@ -88,7 +132,7 @@ const NavBar = () => {
 
   return (
     <NavbarContainer style={{ backgroundColor: darkMode ? '#556CD6' : '#1c5476' }}>
-      <HomeIcon
+      <HomeSharp
         style={buttonStyles.homeIcon}
         onClick={() =>
           history.push({
@@ -96,6 +140,21 @@ const NavBar = () => {
           })
         }
       />
+
+      <Favorite
+        style={{
+          fontSize: '1.7rem',
+          marginRight: '1.8rem',
+          cursor: 'pointer',
+          display: logedIn ? 'block' : 'none',
+        }}
+        onClick={() =>
+          history.push({
+            pathname: '/favorites',
+          })
+        }
+      />
+
       <SearchInput
         style={{ backgroundColor: darkMode ? '#8091E0' : '#557f98' }}
         placeholder="Search..."
@@ -123,16 +182,61 @@ const NavBar = () => {
         aria-haspopup="true"
         onClick={handleClick}
       >
-        <AccountCircleIcon style={buttonStyles.userIcon} />
+        {!logedIn ? (
+          <AccountCircleIcon style={buttonStyles.userIcon} />
+        ) : (
+          <CheckCircle style={buttonStyles.userIcon} />
+        )}
       </Button>
       <Menu
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
-        onClose={handleClose}
+        onClose={handleOpenLogIn}
       >
-        <MenuItem onClick={handleClose}>Sign in</MenuItem>
+        {!logedIn ? (
+          <MenuItem onClick={handleOpenLogIn}>Log in</MenuItem>
+        ) : (
+          <MenuItem onClick={() => onLogOut()}>Log out</MenuItem>
+        )}
       </Menu>
+
+      <Dialog
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">Login</DialogTitle>
+        <DialogContent>
+          <ErrorParagraph>{error.message}</ErrorParagraph>
+          <TextField
+            margin="dense"
+            label="Username"
+            type="text"
+            name="user"
+            value={formData.user}
+            onChange={onChange}
+            fullWidth
+          />
+          <TextField
+            margin="dense"
+            label="Password"
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={onChange}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => onCancel()} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={() => onLogin()} color="primary">
+            Login
+          </Button>
+        </DialogActions>
+      </Dialog>
     </NavbarContainer>
   );
 };

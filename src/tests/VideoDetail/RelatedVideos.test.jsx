@@ -5,7 +5,7 @@ import { videos } from '../../mocks/videos-mock';
 import RelatedVideos from '../../components/VideoDetail/RelatedVideos.component';
 
 describe('<RelatedVideos> rendering', () => {
-  const { container } = render(<RelatedVideos videos={videos} />);
+  const { container } = render(<RelatedVideos videos={videos.items} />);
   const relatedVideos = container.querySelector('div > div');
   const cardVideo = relatedVideos.querySelector('div>div');
 

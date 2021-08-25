@@ -6,7 +6,7 @@ import 'jest-styled-components';
 import HomeVideos, { VideoCard } from '../../components/Home/HomeVideos.component';
 
 describe('<NavBar /> rendering', () => {
-  const { container } = render(<HomeVideos videos={videos} />);
+  const { container } = render(<HomeVideos videos={videos.items} />);
   const homeVideos = container.querySelector('div');
 
   test('should render HomeVideos with styles correctly', () => {

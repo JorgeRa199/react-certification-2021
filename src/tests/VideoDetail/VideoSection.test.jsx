@@ -20,7 +20,8 @@ describe('<VideoSection> rendering', () => {
     expect(videoSection.querySelector('h1')).toHaveTextContent(
       'Video Tour | Welcome to Wizeline Guadalajara'
     );
-    expect(videoSection.querySelector('p')).toHaveTextContent(
+    expect(videoSection.querySelector('p')).toHaveTextContent('Add to favorites');
+    expect(videoSection.querySelectorAll('p')[1]).toHaveTextContent(
       'Follow Hector Padilla, Wizeline Director of Engineering, for a lively tour of our office. In 2018, Wizeline opened its stunning new office in Guadalajara, Jalisco, ...'
     );
   });

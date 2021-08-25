@@ -32,7 +32,7 @@ const VideoDetail = () => {
       const videosRes = await response.json();
       console.log(videosRes);
 
-      setRelatedVideos(videosRes);
+      setRelatedVideos(videosRes.items);
     } catch (error) {
       console.error('Something went wrong: ', error);
     }
@@ -45,7 +45,7 @@ const VideoDetail = () => {
   return (
     <VideoDetailContainer style={{ backgroundColor: darkMode ? '#303030' : '#fafafa' }}>
       <VideoSection video={selectedVideo} />
-      <RelatedVideos videos={relatedVideos} />
+      <RelatedVideos videos={relatedVideos} isFav={false} />
     </VideoDetailContainer>
   );
 };

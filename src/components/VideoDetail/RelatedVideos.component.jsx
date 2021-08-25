@@ -43,20 +43,29 @@ const RelatedVideoContainer = styled.div`
   }
 `;
 
-const RelatedVideos = ({ videos }) => {
+const RelatedVideos = ({ videos, isFav }) => {
   const history = useHistory();
   const { state } = useContext(VideosContext);
   const { darkMode } = state;
+  const videoRoute = (video) => {
+    let route = '';
+    if (isFav) {
+      route = `/favorites-detail/${video.id.videoId}`;
+    } else {
+      route = `/video-detail/${video.id.videoId}`;
+    }
+    return route;
+  };
   return (
     <ListVideoContainer style={{ color: darkMode ? '#fff' : '#000' }}>
       {videos ? (
-        videos.items.map((video) => {
+        videos.map((video) => {
           return (
             <RelatedVideoContainer
               key={video.id.videoId}
               onClick={() =>
                 history.push({
-                  pathname: `/video-detail/${video.id.videoId}`,
+                  pathname: videoRoute(video),
                   state: { props: video },
                 })
               }

@@ -23,7 +23,7 @@ describe('<NavBar /> rendering', () => {
 
     expect(homeButton).toBeTruthy();
     expect(homeButton).toHaveStyle('font-size: 2rem');
-    expect(homeButton).toHaveStyle('margin: 0px 2.5rem 0px 1.8rem');
+    expect(homeButton).toHaveStyle('margin: 0px 2rem 0px 1.8rem');
     expect(homeButton).toHaveStyle('cursor: pointer;');
   });
 

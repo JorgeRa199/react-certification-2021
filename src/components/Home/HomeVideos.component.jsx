@@ -50,12 +50,21 @@ const VideosContainer = styled.div`
   margin: 4.5rem auto;
 `;
 
-export const VideoCard = ({ props }) => {
+export const VideoCard = ({ props, isFav }) => {
   const { snippet, id } = props;
   const { state } = useContext(VideosContext);
   const { darkMode } = state;
 
   const history = useHistory();
+  const onClickRoute = () => {
+    let route = '';
+    if (isFav) {
+      route = `/favorites-detail/${id.videoId}`;
+    } else {
+      route = `/video-detail/${id.videoId}`;
+    }
+    return route;
+  };
 
   return (
     <CardContainer
@@ -65,7 +74,7 @@ export const VideoCard = ({ props }) => {
       }}
       onClick={() =>
         history.push({
-          pathname: `/video-detail/${id.videoId}`,
+          pathname: onClickRoute(),
           state: { props },
         })
       }
@@ -82,15 +91,17 @@ export const VideoCard = ({ props }) => {
 };
 
 /* eslint no-nested-ternary: 0 */
-const HomeVideos = ({ videos }) => {
+const HomeVideos = ({ videos, isFav }) => {
   return (
     <VideosContainer>
       {videos ? (
         videos.error ? (
           <h1>{videos.error.message}</h1>
         ) : (
-          videos.items.map((video) => {
-            return <VideoCard props={video} key={video.snippet.publishedAt} />;
+          videos.map((video) => {
+            return (
+              <VideoCard props={video} isFav={isFav} key={video.snippet.publishedAt} />
+            );
           })
         )
       ) : (
